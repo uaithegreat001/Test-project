@@ -12,7 +12,9 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
+body {
+  background-color:rgb(240, 240, 240);
+}
 /*
  background-color: #242424;
  
