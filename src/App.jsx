@@ -1,9 +1,15 @@
 import { Routes, Route } from 'react-router-dom'
 import Sidebar from './Components/Sidebar'
 import Navbar from './Components/Navbar';
-import Dashboard from './pages/Dashboard' 
+import Dashboard from './pages/Dashboard';
 import BuyBin from './pages/BuyBin';
+import RequestSchedule from './pages/Request-schedule';
+import Profile from './pages/Profile';
+import Logout from './pages/Logout';
+import Help from './pages/Help';
+import PaymentHistory from './Components/PaymentHistory';
 
+import AdminPanel from "./pages/AdminPanel";
 function App() {
   return (
     <div style={{ minHeight: '100vh' }}>
@@ -15,12 +21,16 @@ function App() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/buy-bin" element={<BuyBin />} />
-            {/* Add more routes/components for other sidebar links if needed */}
+            <Route path="/request-schedule" element={<RequestSchedule />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/logout" element={<Logout />} />
+            <Route path="/help" element={<Help />} />
+            <Route path="/payments" element={<PaymentHistory />} />
+            <Route path="/admin" element={<AdminPanel />} />
           </Routes>
         </main>
       </div>
     </div>
-  )
+  );
 }
-
-export default App
+export default App;

@@ -2,18 +2,19 @@ import { Link, useLocation } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 
 function Sidebar() {
-  const location = useLocation(); // Get current path
+  const location = useLocation();
+  // Treat '/' as '/dashboard' for default highlight
+  const currentPath = location.pathname === '/' ? '/dashboard' : location.pathname;
 
-  // A helper to check if the current route is active
   const linkClasses = (path) =>
-    `flex items-center gap-4 text-base font-normal  px-2 py-2 rounded-md
-    ${location.pathname === path 
-      ? "bg-emerald-100 border border-emerald-300 text-emerald-700 font-semibold" 
+    `flex items-center gap-4 text-base font-normal px-2 py-2 rounded-md
+    ${currentPath === path
+      ? "bg-emerald-100 border border-emerald-300 text-emerald-700 font-semibold"
       : "text-gray-700 hover:text-emerald-600"}`;
 
   const iconClasses = (path) =>
     `h-5 w-5 transition-all duration-300 ease-in-out
-    ${location.pathname === path ? "text-emerald-500" : "text-gray-700"}`;
+    ${currentPath === path ? "text-emerald-500" : "text-gray-700"}`;
 
   return (
     <aside className="w-56 bg-gray-100 border-r min-h-screen border-gray-300 p-4">

@@ -1,38 +1,128 @@
 
 import { useState } from "react";
+import { InputField } from "../Components/InputField";
+import { PaymentForm } from "../Components/PaymentForm";
+import PaymentHistory from "../Components/PaymentHistory";
+import { Icon } from "@iconify/react";
 
 function BuyBin() {
-    const [quantity, setQuantity] = useState(1);
-    const pricePerBin = 5000; // Example price per bin
-    const totalPrice = quantity * pricePerBin;
+    const [step, setStep] = useState(1);
+    const [form, setForm] = useState({
+        email: "",
+        quantity: 1,
+        address: "",
+        phone: "",
+        cardName: "",
+        cardNumber: "",
+        expiry: "",
+        cvv: ""
+    });
+    const pricePerBin = 5000;
+    const totalPrice = form.quantity * pricePerBin;
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setForm((prev) => ({
+            ...prev,
+            [name]: name === "quantity" ? Math.max(1, Number(value)) : value
+        }));
+    };
+
+    const handleNext = (e) => {
+        e.preventDefault();
+        setStep(2);
+    };
+
+    const handlePrev = (e) => {
+        e.preventDefault();
+        setStep(1);
+    };
+
+    const handlePay = (e) => {
+        e.preventDefault();
+        // Payment logic here
+        alert("Payment submitted!");
+    };
 
     return (
-        <div className="p-5 mt-10 max-w-md mx-auto bg-white rounded shadow">
-            <h1 className="text-2xl font-bold">Buy Bin</h1>
-            <p className="mt-2 text-gray-600">Purchase a new bin for your waste disposal needs.</p>
-            <form className="mt-6 space-y-4">
-                <div>
-                    <label htmlFor="quantity" className="block font-medium mb-1">Quantity</label>
-                    <input
-                        type="number"
-                        id="quantity"
-                        min={1}
-                        value={quantity}
-                        onChange={e => setQuantity(Number(e.target.value))}
-                        className="border rounded px-3 py-2 w-full"
-                    />
+    <div className="p-5 ml-3 mt-15 max-w-xl  mx-auto flex flex-col gap-6 w-full items-start font-normal">
+            <h1 className="text-2xl md:text-3xl font-medium text-gray-900 w-full">Buy Bin</h1>
+            <p className="text-gray-600">Purchase a new bin for your waste disposal needs. Fill in your details below.</p>
+            <div className="w-full min-h-[350px] overflow-hidden relative max-w-xl mx-auto">
+                <div className={`w-full p-0  transition-transform duration-700 absolute top-0 left-0 ${step === 1 ? 'translate-x-0 z-10' : '-translate-x-full z-0'}`}
+                    style={{ minHeight: 350 }}>
+                    <form className="space-y-5 w-full" onSubmit={handleNext}>
+                            <InputField
+                                label="Email"
+                                type="email"
+                                name="email"
+                                value={form.email}
+                                onChange={handleChange}
+                                autoComplete="email"
+                            />
+                            <div className="flex flex-col md:flex-row gap-4">
+                                <div className="flex-1">
+                                    <InputField
+                                        label="Quantity of Bin"
+                                        type="number"
+                                        name="quantity"
+                                        min={1}
+                                        value={form.quantity}
+                                        onChange={handleChange}
+                                    />
+                                </div>
+                                <div className="flex-1">
+                                    <InputField
+                                        label="Phone Number"
+                                        type="tel"
+                                        name="phone"
+                                        value={form.phone}
+                                        onChange={handleChange}
+                                        autoComplete="tel"
+                                        placeholder="e.g. +2348012345678"
+                                        pattern="^\+234[0-9]{10}$"
+                                    />
+                                </div>
+                            </div>
+                            <InputField
+                                label="Address"
+                                type="text"
+                                name="address"
+                                value={form.address}
+                                onChange={handleChange}
+                                autoComplete="street-address"
+                            />
+                            <div className="flex flex-col md:flex-row gap-4 justify-between items-center">
+                                <span className="font-semibold text-emerald-700">Total Bins: {form.quantity}</span>
+                                <span className="font-semibold text-emerald-700">Total Price: ₦{totalPrice.toLocaleString()}</span>
+                            </div>
+                            <div className="flex justify-end">
+                                <button type="submit" className="bg-emerald-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-emerald-700 transition min-w-[120px] flex items-center gap-2">
+                                    Next
+                                    <Icon icon="mdi:arrow-right" className="w-5 h-5" />
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                <div className={`w-full p-0 transition-transform duration-700 absolute top-0 left-0 ${step === 2 ? 'translate-x-0 z-10' : 'translate-x-full z-0'}`}
+                    style={{ minHeight: 350 }}>
+                    <form className="space-y-5 w-full" onSubmit={handlePay}>
+                        <PaymentForm form={form} onChange={handleChange} />
+                        <div className="flex justify-between gap-4">
+                            <button onClick={handlePrev} className="bg-gray-200 text-gray-700 px-6 py-2 rounded-lg font-medium hover:bg-gray-300 transition min-w-[120px] flex items-center gap-2">
+                                <Icon icon="mdi:arrow-left" className="w-5 h-5" />
+                                Previous
+                            </button>
+                            <button type="submit" className="bg-emerald-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-emerald-700 transition min-w-[120px] flex items-center gap-2">
+                                Pay
+                                <Icon icon="mdi:credit-card" className="w-5 h-5" />
+                            </button>
+                        </div>
+                    </form>
+                    <PaymentHistory />
                 </div>
-                <div className="mt-4">
-                    <span className="font-semibold">Total Bins:</span> {quantity}
-                </div>
-                <div className="mt-2">
-                    <span className="font-semibold">Total Price:</span> ₦{totalPrice.toLocaleString()}
-                </div>
-                <button type="submit" className="mt-6 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Purchase</button>
-            </form>
+            </div>
         </div>
     );
-
 }
-
 export default BuyBin;
